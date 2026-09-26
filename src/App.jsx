@@ -129,7 +129,7 @@ function App() {
   const [activeView, setActiveView] = useState('home');
   const [searchTerm, setSearchTerm] = useState('');
   
-  // ✅ UPDATED: Card Supertype Filter
+  // Card Supertype Filter
   const [supertypeFilter, setSupertypeFilter] = useState('all'); // all / Pokémon / Trainer / Energy
   
   const [filterType, setFilterType] = useState('all');
@@ -236,11 +236,9 @@ const clearAllFavorites = () => {
 
 const isFavorite = (id) => favorites.includes(id);
 
-// NEW — ✅ Fixed version
 const openSet = useCallback(async (set) => {
   if (!set?.id) return;
   
-  // ✅ Find the FULL set object from our loaded list (fixes missing data)
   const fullSet = officialSets.find(s => s.id === set.id) || set;
   
   setSetsDropdownOpen(false);
@@ -251,7 +249,7 @@ const openSet = useCallback(async (set) => {
   setSelectedCard(null);
   setErrorMsg(''); // Clear old errors
   await loadSetCards(set.id, 1);
-}, [officialSets]); // Added officialSets to dependencies
+}, [officialSets]); // officialSets to dependencies
 
   const loadSetCards = useCallback(async (targetSetId, targetPage) => {
     if (!targetSetId) return;
@@ -285,12 +283,12 @@ const openSet = useCallback(async (set) => {
   const goToSearch = () => { setActiveView('browse'); setSelectedSet(null); setSetsDropdownOpen(false); setSelectedCard(null); };
   const goToFavorites = () => { setActiveView('favorites'); setSelectedSet(null); setSetsDropdownOpen(false); setSelectedCard(null); };
 
-  // ✅ UPDATED: Build Query with Supertype Filter
+  //  Query with Supertype Filter
   const buildQuery = useCallback(() => {
     const parts = [];
     if (searchTerm.trim()) parts.push(`name:*${searchTerm.trim()}*`);
     
-    // Supertype filter — plain text matching API values
+    // text matching API values
     if (supertypeFilter === 'pokemon') parts.push('supertype:"Pokémon"');
     if (supertypeFilter === 'trainer') parts.push('supertype:"Trainer"');
     if (supertypeFilter === 'energy') parts.push('supertype:"Energy"');
@@ -355,7 +353,7 @@ const openSet = useCallback(async (set) => {
 
   const clearSearch = () => {
     setSearchTerm('');
-    setSupertypeFilter('all'); // ✅ Reset card type filter
+    setSupertypeFilter('all');
     setFilterType('all');
     setPokemonSubtype('all');
     setRarity('all');
@@ -431,7 +429,7 @@ const openSet = useCallback(async (set) => {
         </div>
       )}
       
-      {/* Card Modal — Works for ALL card types */}
+      {/* Card Modal */}
       {selectedCard && (
         <div className="card-modal-overlay" onClick={() => setSelectedCard(null)}>
           <div className="card-modal-content" onClick={e => e.stopPropagation()}>
@@ -469,7 +467,7 @@ const openSet = useCallback(async (set) => {
                   </p>
                 )}
                 
-                {/* Basic Info — Shown for EVERY card type */}
+                {/* Basic Info for EVERY card type */}
                 <div className="info-stats-row">
                   {selectedCard.supertype && (
                     <div className="stat-item"><strong>Card Type</strong><span>{selectedCard.supertype}</span></div>
@@ -485,7 +483,7 @@ const openSet = useCallback(async (set) => {
                   )}
                 </div>
                 
-                {/* Pokémon Only — Element Type */}
+                {/* Pokémon Element Type */}
                 {selectedCard.types && selectedCard.types.length > 0 && (
                   <CardDetailSection label="Element Type">
                     {selectedCard.types.map(t => (
